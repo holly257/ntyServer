@@ -55,7 +55,7 @@ describe('GET /books', () => {
                     while (i < res.body.length - 1) {
                         const bookAtI = res.body[i];
                         const bookAtIPlus1 = res.body[i + 1];
-                        if (bookAtIPlus1.title < bookAtI.title) {
+                        if (bookAtIPlus1.rank < bookAtI.rank) {
                             sorted = false;
                             break; 
                         }
@@ -65,8 +65,31 @@ describe('GET /books', () => {
                 })
 
     })
-    it('should filter by titie'), () => {
-        const actual = ({search: ''})
-        expect(actual).to.deep.have.same.members(expected)
-    } 
+    it('should filter by titie', () => {
+        return supertest(app)
+            .get('/books')
+            .query({search: 'odd'})
+            .expect(200)
+            .expect('Content-Type', /json/)
+                .then(res => {
+                    expect(res.body).to.be.an('array')
+                    expect(res.body).to.have.lengthOf.at.least(1)
+                    expect(res.body).to.deep.equal([
+                        {
+                            bestsellers_date: 1211587200000,
+                            published_date: 1212883200000,
+                            author: "Dean R Koontz",
+                            description:
+                              "Odd Thomas, who can communicate with the dead, confronts evil forces in a California coastal town.",
+                            price: 27,
+                            publisher: "Bantam",
+                            title: "ODD HOURS",
+                            rank: 1,
+                            rank_last_week: 0,
+                            weeks_on_list: 1,
+                            id: "5b4aa4ead3089013507db18b"
+                          },
+                    ])
+                })
+    }) 
 })

@@ -22,7 +22,7 @@ app.get('/books', (req, res) => {
     let results = books;
 
     if (search){
-        results.filter(book => book
+        results = results.filter(book => book
             .title.toLowerCase()
             .includes(search.toLowerCase()));
     }
